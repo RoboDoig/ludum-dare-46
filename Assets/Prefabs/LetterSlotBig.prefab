@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 3743652351506594168}
   - component: {fileID: 7975967535740618350}
   - component: {fileID: 632405142206015929}
+  - component: {fileID: 5188809902430629267}
   m_Layer: 5
   m_Name: LetterSlotBig
   m_TagString: Untagged
@@ -155,3 +156,15 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5188809902430629267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7472295493150248027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c06b5da5c5a8284cb57d3402a653d94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

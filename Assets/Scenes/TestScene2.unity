@@ -556,7 +556,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wordPanel: {fileID: 1192867265}
   availableLetterPanel: {fileID: 2086332722}
-  letterSlot: {fileID: 0}
+  letterSlot: {fileID: 7472295493150248027, guid: f056e84dbf1317f4f85f2a5d04317903,
+    type: 3}
   wordsAsset: {fileID: 4900000, guid: d0cb56667313ea946aa411d1aa5f9f4c, type: 3}
   startingLives: 10
   minNewLettersPerRound: 3

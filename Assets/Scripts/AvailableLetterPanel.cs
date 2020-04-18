@@ -16,7 +16,7 @@ public class AvailableLetterPanel : MonoBehaviour
         
     }
 
-    public void UpdateLetters(char[] characters)
+    public void InitialiseLetters(char[] characters)
     {
         foreach (char character in characters)
         {
@@ -33,10 +33,5 @@ public class AvailableLetterPanel : MonoBehaviour
             newDisplay.GetComponent<LetterSlotDisplay>().parentLayoutTransform = newSlot.GetComponent<RectTransform>();
             newDisplay.GetComponentInChildren<Text>().text = character.ToString().ToUpper();
         }
-    }
-
-    void Update()
-    {
-
     }
 }

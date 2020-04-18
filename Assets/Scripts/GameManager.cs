@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public int maxNewLettersPerRound = 4;
 
     int gameRounds = 0;
+    int currentLives;
 
     // Start is called before the first frame update
     void Awake()
@@ -47,8 +48,10 @@ public class GameManager : MonoBehaviour
         }
 
         // show them in the UI
-        availableLetterPanel.UpdateLetters(newLetters);
+        availableLetterPanel.InitialiseLetters(newLetters);
 
+        // create initial word panel - IT
+        SetWordPanel(" IT ");
     }
 
     // Update is called once per frame
@@ -75,6 +78,23 @@ public class GameManager : MonoBehaviour
         } else
         {
             return false;
+        }
+    }
+
+    void SetWordPanel(string str)
+    {
+        int i = 0;
+        foreach (char c in str)
+        {
+            GameObject slot = Instantiate(letterSlot);
+            slot.transform.SetParent(wordPanel.transform);
+
+            LetterSlotBig slotComponent = slot.GetComponent<LetterSlotBig>();
+            slotComponent.SetText(c.ToString());
+            slotComponent.sortOrder = i;
+            slotComponent.gameManager = this;
+
+            i++;
         }
     }
 }
