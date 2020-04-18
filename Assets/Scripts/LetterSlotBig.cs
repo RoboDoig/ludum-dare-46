@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class LetterSlotBig : MonoBehaviour, IDropHandler
+public class LetterSlotBig : MonoBehaviour, IDropHandler, IPointerDownHandler
 {
     public GameManager gameManager;
     public int sortOrder;
@@ -20,8 +20,8 @@ public class LetterSlotBig : MonoBehaviour, IDropHandler
             if (slotDisplay != null)
             {
                 SetText(slotDisplay.GetComponentInChildren<Text>().text);
-                Destroy(slotDisplay.gameObject);
-                Destroy(slotDisplay.parentLayoutTransform.gameObject);
+                slotDisplay.DropSuccess();
+                locked = true;
             }
         }
     }
@@ -31,8 +31,10 @@ public class LetterSlotBig : MonoBehaviour, IDropHandler
         GetComponentInChildren<Text>().text = str;
     }
 
-    public void RemoveLetter()
+    public void OnPointerDown(PointerEventData eventData)
     {
-
+        slotDisplay.Undrop();
+        locked = false;
+        SetText("");
     }
 }

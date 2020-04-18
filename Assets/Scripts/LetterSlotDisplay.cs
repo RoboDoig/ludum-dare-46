@@ -5,16 +5,23 @@ using UnityEngine.EventSystems;
 
 public class LetterSlotDisplay : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler
 {
+    public float lerpSpeed;
+
     public RectTransform parentLayoutTransform;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
 
     private bool inDragMode = false;
 
+    private delegate void UpdateAction();
+    private UpdateAction updateAction;
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
+
+        updateAction = DefaultMode;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -34,12 +41,37 @@ public class LetterSlotDisplay : MonoBehaviour, IDragHandler, IEndDragHandler, I
         canvasGroup.blocksRaycasts = true;
     }
 
+    public void DropSuccess()
+    {
+        Debug.Log("Drop Success");
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.alpha = 0;
+        updateAction = DroppedMode;
+    }
+
+    public void Undrop()
+    {
+        updateAction = DefaultMode;
+        canvasGroup.alpha = 1;
+        canvasGroup.blocksRaycasts = true;
+    }
+
     // Update is called once per frame
     void Update()
     {
+        updateAction();
+    }
+
+    void DefaultMode()
+    {
         if (!inDragMode)
         {
-            rectTransform.anchoredPosition = Vector2.Lerp(rectTransform.anchoredPosition, parentLayoutTransform.anchoredPosition, Time.deltaTime);
+            rectTransform.anchoredPosition = Vector2.Lerp(rectTransform.anchoredPosition, parentLayoutTransform.anchoredPosition, Time.deltaTime * lerpSpeed);
         }
+    }
+
+    void DroppedMode()
+    {
+        canvasGroup.blocksRaycasts = false;
     }
 }
