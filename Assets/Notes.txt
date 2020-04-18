@@ -1,0 +1,11 @@
+Core gameplay loop:
+
+You start off with some n hearts. When you run out of hearts you lose.
+
+3 components:
+- Keep: each round you get some random amount of letters. Keep allows you to store those letters for your next round. Maybe n letters kept depletes your life by n
+- It: the word you start with, you draw from your kept / available letters to modify the word, only by adding to the start or end of the word
+- Alive: if your word is valid, and isn't the same as a previous word you entered you gain a heart and progress to the next round
+
+Also to add:
+a time limit on each round
