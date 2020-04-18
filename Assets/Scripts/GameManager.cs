@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
 
         // show them in the UI
         availableLetterPanel.UpdateLetters(newLetters);
+
     }
 
     // Update is called once per frame
