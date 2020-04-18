@@ -33,8 +33,16 @@ public class LetterSlotBig : MonoBehaviour, IDropHandler, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        slotDisplay.Undrop();
-        locked = false;
-        SetText("");
+        if (slotDisplay != null)
+        {
+            slotDisplay.Undrop();
+            locked = false;
+            SetText("");
+        }
+    }
+
+    public string GetCharacter()
+    {
+        return GetComponentInChildren<Text>().text;
     }
 }

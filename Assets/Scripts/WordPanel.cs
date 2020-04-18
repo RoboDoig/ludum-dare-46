@@ -19,11 +19,11 @@ public class WordPanel : MonoBehaviour
     public string GetWord()
     {
         string word = "";
-        CharacterPanel[] characterPanels = gameObject.GetComponentsInChildren<CharacterPanel>();
+        LetterSlotBig[] letterPanels = gameObject.GetComponentsInChildren<LetterSlotBig>();
 
-        foreach(CharacterPanel charPanel in characterPanels)
+        foreach(LetterSlotBig letterPanel in letterPanels)
         {
-            string character = charPanel.GetCharacter();
+            string character = letterPanel.GetCharacter();
             if (character != "")
             {
                 word += character;

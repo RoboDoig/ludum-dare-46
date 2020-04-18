@@ -43,7 +43,6 @@ public class LetterSlotDisplay : MonoBehaviour, IDragHandler, IEndDragHandler, I
 
     public void DropSuccess()
     {
-        Debug.Log("Drop Success");
         canvasGroup.blocksRaycasts = false;
         canvasGroup.alpha = 0;
         updateAction = DroppedMode;

@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public WordPanel wordPanel;
     public AvailableLetterPanel availableLetterPanel;
     public GameObject letterSlot;
+    public Text roundsText;
+    public Text scoreText;
 
     public TextAsset wordsAsset;
     string[] wordArray;
@@ -20,6 +23,7 @@ public class GameManager : MonoBehaviour
     public int maxNewLettersPerRound = 4;
 
     int gameRounds = 0;
+    int score = 0;
     int currentLives;
 
     // Start is called before the first frame update
@@ -30,6 +34,7 @@ public class GameManager : MonoBehaviour
         wordList = new List<string>(wordArray);
 
         previousWorldList = new List<string>();
+        previousWorldList.Add("it");
 
         letterChoice = "abcdefghijklmnopqrstuvwxyz";
     }
@@ -50,6 +55,9 @@ public class GameManager : MonoBehaviour
         // show them in the UI
         availableLetterPanel.InitialiseLetters(newLetters);
 
+        // update score UI
+        UpdateScoreInformation();
+
         // create initial word panel - IT
         SetWordPanel(" IT ");
     }
@@ -64,10 +72,18 @@ public class GameManager : MonoBehaviour
     {
         // Get the current word
         string word = wordPanel.GetWord();
-        
+
         // Scoring logic
+        bool wordValid = CheckWordValid(word);
+        bool notUsedBefore = CheckWordNotUsedPreviously(word);
+
+        // Calculate Score
 
         // Progress to next round
+        if (wordValid && notUsedBefore)
+            ProgressRound(word);
+
+        UpdateScoreInformation();
     }
 
     public bool CheckWord(string word)
@@ -96,5 +112,38 @@ public class GameManager : MonoBehaviour
 
             i++;
         }
+    }
+
+    void ClearWordPanel()
+    {
+        foreach (LetterSlotBig slot in wordPanel.transform.GetComponentsInChildren<LetterSlotBig>())
+        {
+            Destroy(slot.gameObject);
+        }
+    }
+
+    bool CheckWordValid(string word)
+    {
+        return wordList.Contains(word.Trim());
+    }
+
+    bool CheckWordNotUsedPreviously(string word)
+    {
+        return !previousWorldList.Contains(word.Trim());
+    }
+
+    void ProgressRound(string word)
+    {
+        gameRounds++;
+
+        ClearWordPanel();
+
+        SetWordPanel((" " + word.Trim() + " ").ToUpper());
+    }
+
+    void UpdateScoreInformation()
+    {
+        roundsText.text = "Rounds Complete: " + gameRounds.ToString();
+        scoreText.text = "Score: " + score.ToString();
     }
 }
