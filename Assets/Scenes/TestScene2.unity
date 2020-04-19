@@ -662,7 +662,6 @@ MonoBehaviour:
   letterSlot: {fileID: 7472295493150248027, guid: f056e84dbf1317f4f85f2a5d04317903,
     type: 3}
   roundsText: {fileID: 1486133214}
-  scoreText: {fileID: 0}
   livesText: {fileID: 1024673025}
   wordsAsset: {fileID: 4900000, guid: d0cb56667313ea946aa411d1aa5f9f4c, type: 3}
   startingLives: 10
@@ -806,7 +805,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 786886437}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420030}
+        m_MethodName: KeepButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &786886437
@@ -1643,3 +1653,5 @@ MonoBehaviour:
   letterSlotDisplay: {fileID: 3805353601344282546, guid: 3c93cf40c1a5121408aae5a6f8445fe5,
     type: 3}
   letterSlots: []
+  letterDisplays: []
+  nKeptLetters: 0

@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     int gameRounds = 0;
     int score = 0;
     int currentLives;
+    bool keepToggle = false;
 
     // Start is called before the first frame update
     void Awake()
@@ -77,14 +78,31 @@ public class GameManager : MonoBehaviour
         // Scoring logic
         bool wordValid = CheckWordValid(word);
         bool notUsedBefore = CheckWordNotUsedPreviously(word);
+        int nKeptLetters = availableLetterPanel.nKeptLetters;
 
         // Calculate Score
 
+        if (!notUsedBefore)
+        {
+            GameOver();
+        }
+
         // Progress to next round
-        if (wordValid && notUsedBefore)
-            ProgressRound(word);
+        if ((wordValid && notUsedBefore))
+            ProgressRound(word, nKeptLetters);
 
         UpdateScoreInformation();
+    }
+
+    public void KeepButtonClicked()
+    {
+        if (!keepToggle)
+        {
+            keepToggle = true;
+        } else
+        {
+            keepToggle = false;
+        }
     }
 
     public bool CheckWord(string word)
@@ -138,7 +156,7 @@ public class GameManager : MonoBehaviour
         return !previousWorldList.Contains(word.Trim());
     }
 
-    void ProgressRound(string word)
+    void ProgressRound(string word, int nKeptLetters)
     {
         gameRounds++;
         previousWorldList.Add(word.Trim());
@@ -160,12 +178,19 @@ public class GameManager : MonoBehaviour
 
         // show them in the UI
         availableLetterPanel.InitialiseLetters(newLetters);
+
+        // update lives according to length of word made
+        currentLives += word.Trim().Length / 2;
     }
 
     void UpdateScoreInformation()
     {
         roundsText.text = "Rounds Complete: " + gameRounds.ToString();
-        scoreText.text = "Score: " + score.ToString();
         livesText.text = "Lives: " + currentLives.ToString();
+    }
+
+    void GameOver()
+    {
+        Debug.Log("Game Over");
     }
 }

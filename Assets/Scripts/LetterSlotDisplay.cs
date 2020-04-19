@@ -12,6 +12,7 @@ public class LetterSlotDisplay : MonoBehaviour, IDragHandler, IEndDragHandler, I
     private CanvasGroup canvasGroup;
 
     private bool inDragMode = false;
+    public bool available = true;
 
     private delegate void UpdateAction();
     private UpdateAction updateAction;
@@ -45,6 +46,7 @@ public class LetterSlotDisplay : MonoBehaviour, IDragHandler, IEndDragHandler, I
     {
         canvasGroup.blocksRaycasts = false;
         canvasGroup.alpha = 0;
+        available = false;
         updateAction = DroppedMode;
     }
 
@@ -52,6 +54,7 @@ public class LetterSlotDisplay : MonoBehaviour, IDragHandler, IEndDragHandler, I
     {
         updateAction = DefaultMode;
         canvasGroup.alpha = 1;
+        available = true;
         canvasGroup.blocksRaycasts = true;
     }
 
