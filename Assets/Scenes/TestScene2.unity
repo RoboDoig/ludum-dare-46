@@ -663,7 +663,7 @@ MonoBehaviour:
     type: 3}
   roundsText: {fileID: 1486133214}
   livesText: {fileID: 1024673025}
-  wordsAsset: {fileID: 4900000, guid: d0cb56667313ea946aa411d1aa5f9f4c, type: 3}
+  wordsAsset: {fileID: 4900000, guid: f99c1d64a184bec4681f131e2a0e9542, type: 3}
   startingLives: 10
   minNewLettersPerRound: 3
   maxNewLettersPerRound: 7
@@ -1654,4 +1654,3 @@ MonoBehaviour:
     type: 3}
   letterSlots: []
   letterDisplays: []
-  nKeptLetters: 0
