@@ -11,9 +11,6 @@ public class AvailableLetterPanel : MonoBehaviour
     public List<GameObject> letterSlots = new List<GameObject>();
     public List<LetterSlotDisplay> letterDisplays = new List<LetterSlotDisplay>();
 
-    public int nKeptLetters = 0;
-    List<LetterSlotDisplay> keptLetterDisplays = new List<LetterSlotDisplay>();
-
     // Start is called before the first frame update
     void Start()
     {
@@ -22,8 +19,6 @@ public class AvailableLetterPanel : MonoBehaviour
 
     public void InitialiseLetters(char[] characters)
     {
-        nKeptLetters = 0;
-
         foreach (char character in characters)
         {
             // create a new letter slot for each character
@@ -51,5 +46,39 @@ public class AvailableLetterPanel : MonoBehaviour
 
         letterSlots = new List<GameObject>();
         letterDisplays = new List<LetterSlotDisplay>();
+    }
+
+    public void KeepLetters()
+    {
+        foreach (LetterSlotDisplay slotDisplay in letterDisplays)
+        {
+            slotDisplay.GetComponent<Image>().color = Color.red;
+            if (slotDisplay.available)
+            {
+                slotDisplay.kept = true;
+            }
+        }
+    }
+
+    public void UnKeepLetters()
+    {
+        foreach (LetterSlotDisplay slotDisplay in letterDisplays)
+        {
+            slotDisplay.GetComponent<Image>().color = Color.red;
+            slotDisplay.kept = false;
+        }
+    }
+
+    public int CountKeptLetters()
+    {
+        int keptLetters = 0;
+        foreach (LetterSlotDisplay slotDisplay in letterDisplays)
+        {
+            if (slotDisplay.kept)
+            {
+                keptLetters++;
+            }
+        }
+        return keptLetters;
     }
 }

@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
         // Scoring logic
         bool wordValid = CheckWordValid(word);
         bool notUsedBefore = CheckWordNotUsedPreviously(word);
-        int nKeptLetters = availableLetterPanel.nKeptLetters;
+        int nKeptLetters = availableLetterPanel.CountKeptLetters();
 
         // Calculate Score
 
@@ -99,6 +99,7 @@ public class GameManager : MonoBehaviour
         if (!keepToggle)
         {
             keepToggle = true;
+            availableLetterPanel.KeepLetters();
         } else
         {
             keepToggle = false;

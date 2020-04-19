@@ -13,6 +13,7 @@ public class LetterSlotDisplay : MonoBehaviour, IDragHandler, IEndDragHandler, I
 
     private bool inDragMode = false;
     public bool available = true;
+    public bool kept = true;
 
     private delegate void UpdateAction();
     private UpdateAction updateAction;
