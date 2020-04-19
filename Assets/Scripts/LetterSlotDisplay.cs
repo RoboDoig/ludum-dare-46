@@ -3,38 +3,85 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class LetterSlotDisplay : MonoBehaviour, IDragHandler, IEndDragHandler
+public class LetterSlotDisplay : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerUpHandler
 {
+    public float lerpSpeed;
+
     public RectTransform parentLayoutTransform;
     private RectTransform rectTransform;
+    private CanvasGroup canvasGroup;
 
     private bool inDragMode = false;
+    public bool available = true;
+    public bool kept = false;
+
+    private delegate void UpdateAction();
+    private UpdateAction updateAction;
+
+    private void Awake()
+    {
+        rectTransform = GetComponent<RectTransform>();
+        canvasGroup = GetComponent<CanvasGroup>();
+
+        updateAction = DefaultMode;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        inDragMode = true;
+        canvasGroup.blocksRaycasts = false;
+    }
 
     public void OnDrag(PointerEventData eventData)
     {
-        inDragMode = true;
-        transform.position = Input.mousePosition;
+        if (!kept)
+            transform.position = Input.mousePosition;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         inDragMode = false;
+        canvasGroup.blocksRaycasts = true;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void DropSuccess()
     {
-        rectTransform = GetComponent<RectTransform>();
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.alpha = 0;
+        available = false;
+        updateAction = DroppedMode;
+    }
+
+    public void Undrop()
+    {
+        updateAction = DefaultMode;
+        canvasGroup.alpha = 1;
+        available = true;
+        canvasGroup.blocksRaycasts = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //rectTransform.anchoredPosition = parentLayoutTransform.anchoredPosition;
+        updateAction();
+    }
 
+    void DefaultMode()
+    {
         if (!inDragMode)
         {
-            rectTransform.anchoredPosition = Vector2.Lerp(rectTransform.anchoredPosition, parentLayoutTransform.anchoredPosition, Time.deltaTime);
+            rectTransform.anchoredPosition = Vector2.Lerp(rectTransform.anchoredPosition, parentLayoutTransform.anchoredPosition, Time.deltaTime * lerpSpeed);
         }
+    }
+
+    void DroppedMode()
+    {
+        canvasGroup.blocksRaycasts = false;
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        inDragMode = false;
+        canvasGroup.blocksRaycasts = true;
     }
 }

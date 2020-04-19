@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 3805353601344282508}
   - component: {fileID: -3739323664174089189}
   - component: {fileID: 5187363409807724760}
+  - component: {fileID: -1245049519193197334}
   m_Layer: 5
   m_Name: LetterSlotDisplay
   m_TagString: Untagged
@@ -189,4 +190,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7546ba43cfa1e7a48b197e7cd8124e82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpSpeed: 2
   parentLayoutTransform: {fileID: 0}
+  available: 1
+  kept: 0
+--- !u!225 &-1245049519193197334
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3805353601344282546}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
