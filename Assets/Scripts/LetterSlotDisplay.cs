@@ -13,7 +13,7 @@ public class LetterSlotDisplay : MonoBehaviour, IDragHandler, IEndDragHandler, I
 
     private bool inDragMode = false;
     public bool available = true;
-    public bool kept = true;
+    public bool kept = false;
 
     private delegate void UpdateAction();
     private UpdateAction updateAction;
@@ -34,7 +34,8 @@ public class LetterSlotDisplay : MonoBehaviour, IDragHandler, IEndDragHandler, I
 
     public void OnDrag(PointerEventData eventData)
     {
-        transform.position = Input.mousePosition;
+        if (!kept)
+            transform.position = Input.mousePosition;
     }
 
     public void OnEndDrag(PointerEventData eventData)

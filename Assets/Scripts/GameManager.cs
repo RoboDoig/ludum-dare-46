@@ -48,10 +48,10 @@ public class GameManager : MonoBehaviour
         int newLettersThisRound = Random.Range(minNewLettersPerRound, maxNewLettersPerRound);
 
         // choose those letters
-        char[] newLetters = new char[newLettersThisRound];
+        string newLetters = "";
         for (int i = 0; i < newLettersThisRound; i++)
         {
-            newLetters[i] = letterChoice[Random.Range(0, letterChoice.Length)];
+            newLetters += letterChoice[Random.Range(0, letterChoice.Length)];
         }
 
         // show them in the UI
@@ -78,7 +78,8 @@ public class GameManager : MonoBehaviour
         // Scoring logic
         bool wordValid = CheckWordValid(word);
         bool notUsedBefore = CheckWordNotUsedPreviously(word);
-        int nKeptLetters = availableLetterPanel.CountKeptLetters();
+        string keptLetters = availableLetterPanel.GetKeptLetters();
+        Debug.Log(keptLetters);
 
         // Calculate Score
 
@@ -89,7 +90,7 @@ public class GameManager : MonoBehaviour
 
         // Progress to next round
         if ((wordValid && notUsedBefore))
-            ProgressRound(word, nKeptLetters);
+            ProgressRound(word, keptLetters);
 
         UpdateScoreInformation();
     }
@@ -103,6 +104,7 @@ public class GameManager : MonoBehaviour
         } else
         {
             keepToggle = false;
+            availableLetterPanel.UnKeepLetters();
         }
     }
 
@@ -149,7 +151,7 @@ public class GameManager : MonoBehaviour
 
     bool CheckWordValid(string word)
     {
-        return wordList.Contains(word.Trim());
+        return wordList.Contains(word.Trim().ToUpper());
     }
 
     bool CheckWordNotUsedPreviously(string word)
@@ -157,7 +159,7 @@ public class GameManager : MonoBehaviour
         return !previousWorldList.Contains(word.Trim());
     }
 
-    void ProgressRound(string word, int nKeptLetters)
+    void ProgressRound(string word, string keptLetters)
     {
         gameRounds++;
         previousWorldList.Add(word.Trim());
@@ -171,17 +173,21 @@ public class GameManager : MonoBehaviour
         int newLettersThisRound = Random.Range(minNewLettersPerRound, maxNewLettersPerRound);
 
         // choose those letters
-        char[] newLetters = new char[newLettersThisRound];
+        string newLetters = "";
         for (int i = 0; i < newLettersThisRound; i++)
         {
-            newLetters[i] = letterChoice[Random.Range(0, letterChoice.Length)];
+            newLetters += letterChoice[Random.Range(0, letterChoice.Length)];
         }
+        newLetters = keptLetters + newLetters;
 
         // show them in the UI
         availableLetterPanel.InitialiseLetters(newLetters);
 
         // update lives according to length of word made
         currentLives += word.Trim().Length / 2;
+        currentLives -= keptLetters.Length;
+
+        keepToggle = false;
     }
 
     void UpdateScoreInformation()

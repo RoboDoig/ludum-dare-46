@@ -17,9 +17,9 @@ public class AvailableLetterPanel : MonoBehaviour
         
     }
 
-    public void InitialiseLetters(char[] characters)
+    public void InitialiseLetters(string letters)
     {
-        foreach (char character in characters)
+        foreach (char character in letters)
         {
             // create a new letter slot for each character
             GameObject newSlot = Instantiate(letterSlot);
@@ -53,10 +53,7 @@ public class AvailableLetterPanel : MonoBehaviour
         foreach (LetterSlotDisplay slotDisplay in letterDisplays)
         {
             slotDisplay.GetComponent<Image>().color = Color.red;
-            if (slotDisplay.available)
-            {
-                slotDisplay.kept = true;
-            }
+            slotDisplay.kept = true;
         }
     }
 
@@ -64,21 +61,22 @@ public class AvailableLetterPanel : MonoBehaviour
     {
         foreach (LetterSlotDisplay slotDisplay in letterDisplays)
         {
-            slotDisplay.GetComponent<Image>().color = Color.red;
+            slotDisplay.GetComponent<Image>().color = Color.white;
             slotDisplay.kept = false;
         }
     }
 
-    public int CountKeptLetters()
+    public string GetKeptLetters()
     {
-        int keptLetters = 0;
+        string keptLetters = "";
         foreach (LetterSlotDisplay slotDisplay in letterDisplays)
         {
-            if (slotDisplay.kept)
+            if(slotDisplay.kept && slotDisplay.available)
             {
-                keptLetters++;
+                keptLetters += slotDisplay.GetComponentInChildren<Text>().text;
             }
         }
+
         return keptLetters;
     }
 }
