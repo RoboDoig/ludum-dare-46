@@ -10,6 +10,10 @@ public class GameManager : MonoBehaviour
     public GameObject letterSlot;
     public Text roundsText;
     public Text livesText;
+    public Text timerText;
+    public Text roundSummaryText;
+    public Text failMessageText;
+    public GameObject gameOverPanel;
 
     public TextAsset wordsAsset;
     string[] wordArray;
@@ -21,11 +25,15 @@ public class GameManager : MonoBehaviour
     public int startingLives = 10;
     public int minNewLettersPerRound = 1;
     public int maxNewLettersPerRound = 4;
+    public float defaultTimerLength = 30f; // default amount of time per round
+    public float timerMultiplier = 0.1f;
 
     int gameRounds = 0;
     int score = 0;
     int currentLives;
     bool keepToggle = false;
+    float timer;
+    float timerSpeed;
 
     // Start is called before the first frame update
     void Awake()
@@ -38,6 +46,8 @@ public class GameManager : MonoBehaviour
         previousWorldList.Add("it");
 
         letterChoice = "abcdefghijklmnopqrstuvwxyz ";
+
+        gameOverPanel.SetActive(false);
     }
 
     void Start()
@@ -62,12 +72,22 @@ public class GameManager : MonoBehaviour
 
         // create initial word panel - IT
         SetWordPanel(" IT ", false);
+
+        // set timer
+        timer = defaultTimerLength;
+        timerSpeed = 1f;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        timer -= Time.deltaTime * timerSpeed;
+        if(timer < 0)
+        {
+            timer = 0;
+            GameOver("You ran out of time");
+        }
+        UpdateTimerInformation();
     }
 
     public void AliveButtonClicked()
@@ -79,13 +99,12 @@ public class GameManager : MonoBehaviour
         bool wordValid = CheckWordValid(word);
         bool notUsedBefore = CheckWordNotUsedPreviously(word);
         string keptLetters = availableLetterPanel.GetKeptLetters();
-        Debug.Log(keptLetters);
 
         // Calculate Score
 
         if (!notUsedBefore)
         {
-            GameOver();
+            GameOver("You repeated the word: " + word.ToUpper());
         }
 
         // Progress to next round
@@ -133,11 +152,6 @@ public class GameManager : MonoBehaviour
             slotComponent.gameManager = this;
 
             i++;
-
-            if (addLetterDisplay)
-            {
-                
-            }
         }
     }
 
@@ -188,6 +202,10 @@ public class GameManager : MonoBehaviour
         currentLives -= keptLetters.Length;
 
         keepToggle = false;
+
+        // reset timer
+        timer = defaultTimerLength;
+        timerSpeed = 1 + (newLetters.Length * timerMultiplier);
     }
 
     void UpdateScoreInformation()
@@ -196,8 +214,53 @@ public class GameManager : MonoBehaviour
         livesText.text = "Lives: " + currentLives.ToString();
     }
 
-    void GameOver()
+    void UpdateTimerInformation()
     {
-        Debug.Log("Game Over");
+        timerText.text = "Time Left: " + timer.ToString();
+    }
+
+    void GameOver(string failMessage)
+    {
+        gameOverPanel.SetActive(true);
+        roundSummaryText.text = "You lasted " + gameRounds.ToString() + " rounds";
+        failMessageText.text = failMessage;
+    }
+
+    public void ResetGame()
+    {
+        gameOverPanel.SetActive(false);
+
+        previousWorldList = new List<string>();
+
+        ClearWordPanel();
+        previousWorldList.Add("it");
+
+        availableLetterPanel.ClearLetters();
+
+        currentLives = startingLives;
+        gameRounds = 0;
+        // Begin new round
+        // how many letters do we get this round?
+        int newLettersThisRound = Random.Range(minNewLettersPerRound, maxNewLettersPerRound);
+
+        // choose those letters
+        string newLetters = "";
+        for (int i = 0; i < newLettersThisRound; i++)
+        {
+            newLetters += letterChoice[Random.Range(0, letterChoice.Length)];
+        }
+
+        // show them in the UI
+        availableLetterPanel.InitialiseLetters(newLetters);
+
+        // update score UI
+        UpdateScoreInformation();
+
+        // create initial word panel - IT
+        SetWordPanel(" IT ", false);
+
+        // set timer
+        timer = defaultTimerLength;
+        timerSpeed = 1f;
     }
 }
