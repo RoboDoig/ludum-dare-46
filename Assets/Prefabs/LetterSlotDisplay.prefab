@@ -192,6 +192,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lerpSpeed: 2
   parentLayoutTransform: {fileID: 0}
+  available: 1
+  kept: 0
 --- !u!225 &-1245049519193197334
 CanvasGroup:
   m_ObjectHideFlags: 0
