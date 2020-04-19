@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public WordPanel wordPanel;
     public AvailableLetterPanel availableLetterPanel;
+    public PowerupPanel powerupPanel;
     public GameObject letterSlot;
     public Text roundsText;
     public Text timerText;
@@ -201,6 +202,9 @@ public class GameManager : MonoBehaviour
         // reset timer
         timer = defaultTimerLength;
         timerSpeed = 1 + (newLetters.Length * timerMultiplier);
+
+        // update powerups
+        powerupPanel.UpdatePowerupPanel();
     }
 
     void UpdateScoreInformation()
@@ -259,7 +263,7 @@ public class GameManager : MonoBehaviour
 
     public void TimerPowerup()
     {
-        //timer += defaultTimerLength;
+        timer += defaultTimerLength;
     }
 
     public void NewLettersPowerup()
@@ -267,7 +271,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void FreeVowelPowerup()
+    public void FreeVowelsPowerup()
     {
 
     }
