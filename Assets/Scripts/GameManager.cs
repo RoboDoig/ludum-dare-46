@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     public Text roundsText;
     public Text livesText;
     public Text timerText;
+    public Text roundSummaryText;
+    public Text failMessageText;
+    public GameObject gameOverPanel;
 
     public TextAsset wordsAsset;
     string[] wordArray;
@@ -43,6 +46,8 @@ public class GameManager : MonoBehaviour
         previousWorldList.Add("it");
 
         letterChoice = "abcdefghijklmnopqrstuvwxyz ";
+
+        gameOverPanel.SetActive(false);
     }
 
     void Start()
@@ -77,6 +82,11 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         timer -= Time.deltaTime * timerSpeed;
+        if(timer < 0)
+        {
+            timer = 0;
+            GameOver("You ran out of time");
+        }
         UpdateTimerInformation();
     }
 
@@ -94,7 +104,7 @@ public class GameManager : MonoBehaviour
 
         if (!notUsedBefore)
         {
-            GameOver();
+            GameOver("You repeated the word: " + word.ToUpper());
         }
 
         // Progress to next round
@@ -209,8 +219,48 @@ public class GameManager : MonoBehaviour
         timerText.text = "Time Left: " + timer.ToString();
     }
 
-    void GameOver()
+    void GameOver(string failMessage)
     {
-        Debug.Log("Game Over");
+        gameOverPanel.SetActive(true);
+        roundSummaryText.text = "You lasted " + gameRounds.ToString() + " rounds";
+        failMessageText.text = failMessage;
+    }
+
+    public void ResetGame()
+    {
+        gameOverPanel.SetActive(false);
+
+        previousWorldList = new List<string>();
+
+        ClearWordPanel();
+        previousWorldList.Add("it");
+
+        availableLetterPanel.ClearLetters();
+
+        currentLives = startingLives;
+        gameRounds = 0;
+        // Begin new round
+        // how many letters do we get this round?
+        int newLettersThisRound = Random.Range(minNewLettersPerRound, maxNewLettersPerRound);
+
+        // choose those letters
+        string newLetters = "";
+        for (int i = 0; i < newLettersThisRound; i++)
+        {
+            newLetters += letterChoice[Random.Range(0, letterChoice.Length)];
+        }
+
+        // show them in the UI
+        availableLetterPanel.InitialiseLetters(newLetters);
+
+        // update score UI
+        UpdateScoreInformation();
+
+        // create initial word panel - IT
+        SetWordPanel(" IT ", false);
+
+        // set timer
+        timer = defaultTimerLength;
+        timerSpeed = 1f;
     }
 }
