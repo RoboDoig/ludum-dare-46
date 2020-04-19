@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public AvailableLetterPanel availableLetterPanel;
     public GameObject letterSlot;
     public Text roundsText;
-    public Text scoreText;
+    public Text livesText;
 
     public TextAsset wordsAsset;
     string[] wordArray;
@@ -36,11 +36,12 @@ public class GameManager : MonoBehaviour
         previousWorldList = new List<string>();
         previousWorldList.Add("it");
 
-        letterChoice = "abcdefghijklmnopqrstuvwxyz";
+        letterChoice = "abcdefghijklmnopqrstuvwxyz ";
     }
 
     void Start()
     {
+        currentLives = startingLives;
         // Begin new round
         // how many letters do we get this round?
         int newLettersThisRound = Random.Range(minNewLettersPerRound, maxNewLettersPerRound);
@@ -59,7 +60,7 @@ public class GameManager : MonoBehaviour
         UpdateScoreInformation();
 
         // create initial word panel - IT
-        SetWordPanel(" IT ");
+        SetWordPanel(" IT ", false);
     }
 
     // Update is called once per frame
@@ -97,7 +98,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void SetWordPanel(string str)
+    void SetWordPanel(string str, bool addLetterDisplay)
     {
         int i = 0;
         foreach (char c in str)
@@ -111,6 +112,11 @@ public class GameManager : MonoBehaviour
             slotComponent.gameManager = this;
 
             i++;
+
+            if (addLetterDisplay)
+            {
+                
+            }
         }
     }
 
@@ -135,15 +141,31 @@ public class GameManager : MonoBehaviour
     void ProgressRound(string word)
     {
         gameRounds++;
+        previousWorldList.Add(word.Trim());
 
         ClearWordPanel();
+        availableLetterPanel.ClearLetters();
 
-        SetWordPanel((" " + word.Trim() + " ").ToUpper());
+        SetWordPanel((" " + word.Trim() + " ").ToUpper(), true);
+
+        // how many letters do we get this round?
+        int newLettersThisRound = Random.Range(minNewLettersPerRound, maxNewLettersPerRound);
+
+        // choose those letters
+        char[] newLetters = new char[newLettersThisRound];
+        for (int i = 0; i < newLettersThisRound; i++)
+        {
+            newLetters[i] = letterChoice[Random.Range(0, letterChoice.Length)];
+        }
+
+        // show them in the UI
+        availableLetterPanel.InitialiseLetters(newLetters);
     }
 
     void UpdateScoreInformation()
     {
         roundsText.text = "Rounds Complete: " + gameRounds.ToString();
         scoreText.text = "Score: " + score.ToString();
+        livesText.text = "Lives: " + currentLives.ToString();
     }
 }

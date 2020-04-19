@@ -34,4 +34,12 @@ public class AvailableLetterPanel : MonoBehaviour
             newDisplay.GetComponentInChildren<Text>().text = character.ToString().ToUpper();
         }
     }
+
+    public void ClearLetters()
+    {
+        foreach(Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
 }

@@ -11,6 +11,7 @@ public class LetterSlotBig : MonoBehaviour, IDropHandler, IPointerDownHandler
     public bool locked = false;
 
     private LetterSlotDisplay slotDisplay;
+    private string prevLetter;
 
     public void OnDrop(PointerEventData eventData)
     {
@@ -28,6 +29,7 @@ public class LetterSlotBig : MonoBehaviour, IDropHandler, IPointerDownHandler
 
     public void SetText(string str)
     {
+        prevLetter = GetComponentInChildren<Text>().text;
         GetComponentInChildren<Text>().text = str;
     }
 
@@ -36,8 +38,9 @@ public class LetterSlotBig : MonoBehaviour, IDropHandler, IPointerDownHandler
         if (slotDisplay != null)
         {
             slotDisplay.Undrop();
+            slotDisplay = null;
             locked = false;
-            SetText("");
+            SetText(prevLetter);
         }
     }
 
