@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class LetterSlotDisplay : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler
+public class LetterSlotDisplay : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerUpHandler
 {
     public float lerpSpeed;
 
@@ -77,5 +77,11 @@ public class LetterSlotDisplay : MonoBehaviour, IDragHandler, IEndDragHandler, I
     void DroppedMode()
     {
         canvasGroup.blocksRaycasts = false;
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        inDragMode = false;
+        canvasGroup.blocksRaycasts = true;
     }
 }
