@@ -32,6 +32,7 @@ public class PowerupPanel : MonoBehaviour
             timerPowerupActive = false;
             timerPowerupCount = 0;
             timerPowerupButton.GetComponent<Image>().color = Color.black;
+            timerPowerupButton.GetComponentInChildren<Text>().color = Color.black;
         }
     }
 
@@ -43,6 +44,7 @@ public class PowerupPanel : MonoBehaviour
             newLettersPowerupActive = false;
             newLettersPowerupCount = 0;
             newLettersPowerupButton.GetComponent<Image>().color = Color.black;
+            newLettersPowerupButton.GetComponentInChildren<Text>().color = Color.black;
         }
     }
 
@@ -54,6 +56,7 @@ public class PowerupPanel : MonoBehaviour
             freeVowelsPowerupActive = false;
             freeVowelsPowerupCount = 0;
             freeVowelsPowerupButton.GetComponent<Image>().color = Color.black;
+            freeVowelsPowerupButton.GetComponentInChildren<Text>().color = Color.black;
         }
     }
 
@@ -64,6 +67,7 @@ public class PowerupPanel : MonoBehaviour
         {
             timerPowerupActive = true;
             timerPowerupButton.GetComponent<Image>().color = Color.white;
+            timerPowerupButton.GetComponentInChildren<Text>().color = Color.white;
         } 
 
         newLettersPowerupCount++;
@@ -71,6 +75,7 @@ public class PowerupPanel : MonoBehaviour
         {
             newLettersPowerupActive = true;
             newLettersPowerupButton.GetComponent<Image>().color = Color.white;
+            newLettersPowerupButton.GetComponentInChildren<Text>().color = Color.white;
         }
 
         freeVowelsPowerupCount++;
@@ -78,6 +83,7 @@ public class PowerupPanel : MonoBehaviour
         {
             freeVowelsPowerupActive = true;
             freeVowelsPowerupButton.GetComponent<Image>().color = Color.white;
+            freeVowelsPowerupButton.GetComponentInChildren<Text>().color = Color.white;
         }
     }
 }

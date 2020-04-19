@@ -1,15 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WordPanel : MonoBehaviour
 {
+    [Header("Shake Attributes")]
     public float shakeSpeed;
     public float shakeAmount;
     public float shakeTime;
 
+    [Header("Colour Attributes")]
+    public float colourSpeed;
+    public float colourTime;
+    public Color fromColour;
+    public Color toColour;
+
     private float shakeTimer;
     private Vector3 startPos;
+
+    private float colourTimer;
+    private Image borderImage;
+    private float colourCount;
 
     private delegate void UpdateAction();
     private UpdateAction updateAction;
@@ -20,6 +32,7 @@ public class WordPanel : MonoBehaviour
     void Start()
     {
         rectTransform = GetComponent<RectTransform>();
+        borderImage = GetComponent<Image>();
         updateAction = DefaultUpdate;
     }
 
@@ -52,6 +65,14 @@ public class WordPanel : MonoBehaviour
         startPos = rectTransform.anchoredPosition;
     }
 
+    public void ColourChange()
+    {
+        updateAction = ColourUpdate;
+        colourTimer = colourTime;
+        colourCount = 0f;
+        LetterSlotBig[] letterPanels = gameObject.GetComponentsInChildren<LetterSlotBig>();
+    }
+
     void DefaultUpdate()
     {
 
@@ -64,6 +85,18 @@ public class WordPanel : MonoBehaviour
         if (shakeTimer <= 0f)
         {
             rectTransform.anchoredPosition = startPos;
+            updateAction = DefaultUpdate;
+        }
+    }
+
+    void ColourUpdate()
+    {
+        colourCount += Time.deltaTime * colourSpeed;
+        colourTimer -= Time.deltaTime;
+        borderImage.color = Color.Lerp(fromColour, toColour, Mathf.PingPong(colourCount, 1));
+        if (colourTimer <= 0f)
+        {
+            borderImage.color = fromColour;
             updateAction = DefaultUpdate;
         }
     }

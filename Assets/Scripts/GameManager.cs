@@ -8,9 +8,9 @@ public class GameManager : MonoBehaviour
     public WordPanel wordPanel;
     public AvailableLetterPanel availableLetterPanel;
     public PowerupPanel powerupPanel;
+    public Image timerImage;
     public GameObject letterSlot;
     public Text roundsText;
-    public Text timerText;
     public Text roundSummaryText;
     public Text failMessageText;
     public GameObject gameOverPanel;
@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     bool keepToggle = false;
     float timer;
     float timerSpeed;
+    float timerMaxThisRound;
 
     // Start is called before the first frame update
     void Awake()
@@ -73,6 +74,7 @@ public class GameManager : MonoBehaviour
         // set timer
         timer = defaultTimerLength;
         timerSpeed = 1f;
+        timerMaxThisRound = timer;
     }
 
     // Update is called once per frame
@@ -84,7 +86,9 @@ public class GameManager : MonoBehaviour
             timer = 0;
             GameOver("You ran out of time");
         }
-        UpdateTimerInformation();
+
+        float timerFraction = timer / timerMaxThisRound;
+        timerImage.fillAmount = timerFraction;
     }
 
     public void AliveButtonClicked()
@@ -102,6 +106,11 @@ public class GameManager : MonoBehaviour
         if (!notUsedBefore)
         {
             GameOver("You repeated the word: " + word.ToUpper());
+        }
+
+        if (!wordValid)
+        {
+            wordPanel.Shake();
         }
 
         // Progress to next round
@@ -172,6 +181,8 @@ public class GameManager : MonoBehaviour
 
     void ProgressRound(string word, string keptLetters)
     {
+        wordPanel.ColourChange();
+
         gameRounds++;
         previousWorldList.Add(word.Trim());
 
@@ -180,7 +191,6 @@ public class GameManager : MonoBehaviour
         int newLettersThisRound = availableLetterPanel.CountAvailableLetters() + Random.Range(1, 3);
 
         ClearWordPanel();
-        wordPanel.Shake();
 
         availableLetterPanel.ClearLetters();
 
@@ -202,6 +212,7 @@ public class GameManager : MonoBehaviour
         // reset timer
         timer = defaultTimerLength;
         timerSpeed = 1 + (newLetters.Length * timerMultiplier);
+        timerMaxThisRound = timer;
 
         // update powerups
         powerupPanel.UpdatePowerupPanel();
@@ -209,12 +220,7 @@ public class GameManager : MonoBehaviour
 
     void UpdateScoreInformation()
     {
-        roundsText.text = "Rounds Complete: " + gameRounds.ToString();
-    }
-
-    void UpdateTimerInformation()
-    {
-        timerText.text = "Time Left: " + timer.ToString();
+        roundsText.text = gameRounds.ToString();
     }
 
     void GameOver(string failMessage)
@@ -264,6 +270,7 @@ public class GameManager : MonoBehaviour
     public void TimerPowerup()
     {
         timer += defaultTimerLength;
+        timerMaxThisRound = timer;
     }
 
     public void NewLettersPowerup()
