@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
     public AvailableLetterPanel availableLetterPanel;
     public GameObject letterSlot;
     public Text roundsText;
-    public Text livesText;
     public Text timerText;
     public Text roundSummaryText;
     public Text failMessageText;
@@ -22,15 +21,13 @@ public class GameManager : MonoBehaviour
     string letterChoice;
 
     [Header("Game Parameters")]
-    public int startingLives = 10;
-    public int minNewLettersPerRound = 1;
+    public int minNewLettersPerRound = 1; 
     public int maxNewLettersPerRound = 4;
     public float defaultTimerLength = 30f; // default amount of time per round
     public float timerMultiplier = 0.1f;
 
     int gameRounds = 0;
     int score = 0;
-    int currentLives;
     bool keepToggle = false;
     float timer;
     float timerSpeed;
@@ -52,7 +49,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        currentLives = startingLives;
         // Begin new round
         // how many letters do we get this round?
         int newLettersThisRound = Random.Range(minNewLettersPerRound, maxNewLettersPerRound);
@@ -180,7 +176,7 @@ public class GameManager : MonoBehaviour
 
         // how many letters do we get this round?
         //int newLettersThisRound = Random.Range(minNewLettersPerRound, maxNewLettersPerRound);
-        int newLettersThisRound = availableLetterPanel.CountAvailableLetters() + 1;
+        int newLettersThisRound = availableLetterPanel.CountAvailableLetters() + Random.Range(1, 3);
 
         ClearWordPanel();
         wordPanel.Shake();
@@ -200,10 +196,6 @@ public class GameManager : MonoBehaviour
         // show them in the UI
         availableLetterPanel.InitialiseLetters(newLetters);
 
-        // update lives according to length of word made
-        currentLives += word.Trim().Length / 2;
-        currentLives -= keptLetters.Length;
-
         keepToggle = false;
 
         // reset timer
@@ -214,7 +206,6 @@ public class GameManager : MonoBehaviour
     void UpdateScoreInformation()
     {
         roundsText.text = "Rounds Complete: " + gameRounds.ToString();
-        livesText.text = "Lives: " + currentLives.ToString();
     }
 
     void UpdateTimerInformation()
@@ -240,7 +231,6 @@ public class GameManager : MonoBehaviour
 
         availableLetterPanel.ClearLetters();
 
-        currentLives = startingLives;
         gameRounds = 0;
         // Begin new round
         // how many letters do we get this round?
@@ -265,5 +255,20 @@ public class GameManager : MonoBehaviour
         // set timer
         timer = defaultTimerLength;
         timerSpeed = 1f;
+    }
+
+    public void TimerPowerup()
+    {
+        //timer += defaultTimerLength;
+    }
+
+    public void NewLettersPowerup()
+    {
+
+    }
+
+    public void FreeVowelPowerup()
+    {
+
     }
 }

@@ -59,7 +59,6 @@ public class WordPanel : MonoBehaviour
 
     void ShakeUpdate()
     {
-        Debug.Log("Shaking");
         shakeTimer -= Time.deltaTime;
         rectTransform.anchoredPosition = new Vector2(startPos.x + (Mathf.Sin(Time.time * shakeSpeed) * shakeAmount), rectTransform.anchoredPosition.y);
         if (shakeTimer <= 0f)
