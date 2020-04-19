@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public GameObject letterSlot;
     public Text roundsText;
     public Text livesText;
+    public Text timerText;
 
     public TextAsset wordsAsset;
     string[] wordArray;
@@ -21,11 +22,15 @@ public class GameManager : MonoBehaviour
     public int startingLives = 10;
     public int minNewLettersPerRound = 1;
     public int maxNewLettersPerRound = 4;
+    public float defaultTimerLength = 30f; // default amount of time per round
+    public float timerMultiplier = 0.1f;
 
     int gameRounds = 0;
     int score = 0;
     int currentLives;
     bool keepToggle = false;
+    float timer;
+    float timerSpeed;
 
     // Start is called before the first frame update
     void Awake()
@@ -62,12 +67,17 @@ public class GameManager : MonoBehaviour
 
         // create initial word panel - IT
         SetWordPanel(" IT ", false);
+
+        // set timer
+        timer = defaultTimerLength;
+        timerSpeed = 1f;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        timer -= Time.deltaTime * timerSpeed;
+        UpdateTimerInformation();
     }
 
     public void AliveButtonClicked()
@@ -79,7 +89,6 @@ public class GameManager : MonoBehaviour
         bool wordValid = CheckWordValid(word);
         bool notUsedBefore = CheckWordNotUsedPreviously(word);
         string keptLetters = availableLetterPanel.GetKeptLetters();
-        Debug.Log(keptLetters);
 
         // Calculate Score
 
@@ -133,11 +142,6 @@ public class GameManager : MonoBehaviour
             slotComponent.gameManager = this;
 
             i++;
-
-            if (addLetterDisplay)
-            {
-                
-            }
         }
     }
 
@@ -188,12 +192,21 @@ public class GameManager : MonoBehaviour
         currentLives -= keptLetters.Length;
 
         keepToggle = false;
+
+        // reset timer
+        timer = defaultTimerLength;
+        timerSpeed = 1 + (newLetters.Length * timerMultiplier);
     }
 
     void UpdateScoreInformation()
     {
         roundsText.text = "Rounds Complete: " + gameRounds.ToString();
         livesText.text = "Lives: " + currentLives.ToString();
+    }
+
+    void UpdateTimerInformation()
+    {
+        timerText.text = "Time Left: " + timer.ToString();
     }
 
     void GameOver()
