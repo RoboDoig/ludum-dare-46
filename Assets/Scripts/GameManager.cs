@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public WordPanel wordPanel;
     public AvailableLetterPanel availableLetterPanel;
+    public PowerupPanel powerupPanel;
     public GameObject letterSlot;
     public Text roundsText;
     public Text timerText;
@@ -201,6 +202,9 @@ public class GameManager : MonoBehaviour
         // reset timer
         timer = defaultTimerLength;
         timerSpeed = 1 + (newLetters.Length * timerMultiplier);
+
+        // update powerups
+        powerupPanel.UpdatePowerupPanel();
     }
 
     void UpdateScoreInformation()
@@ -259,16 +263,36 @@ public class GameManager : MonoBehaviour
 
     public void TimerPowerup()
     {
-        //timer += defaultTimerLength;
+        timer += defaultTimerLength;
     }
 
     public void NewLettersPowerup()
     {
+        // how many letters do we get this round?
+        int newLettersThisRound = availableLetterPanel.CountTotalLetters();
 
+        // choose those letters
+        string newLetters = "";
+        for (int i = 0; i < newLettersThisRound; i++)
+        {
+            newLetters += letterChoice[Random.Range(0, letterChoice.Length)];
+        }
+
+        // show them in the UI
+        availableLetterPanel.ClearLetters();
+        availableLetterPanel.InitialiseLetters(newLetters);
     }
 
-    public void FreeVowelPowerup()
+    public void FreeVowelsPowerup()
     {
+        string vowelChoice = "aeiou";
+        int nVowels = Random.Range(1, 3);
+        string newLetters = "";
+        for (int i = 0; i < nVowels; i++)
+        {
+            newLetters += vowelChoice[Random.Range(0, vowelChoice.Length)];
+        }
 
+        availableLetterPanel.AddLetters(newLetters);
     }
 }
