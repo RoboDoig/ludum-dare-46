@@ -649,8 +649,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 519420030}
   newTimerPowerupEvery: 2
-  newLetterRerollEvery: 3
-  newFreeVowelEvery: 4
+  newLetterRerollEvery: 4
+  newFreeVowelEvery: 6
   timerPowerupButton: {fileID: 1849737237}
   newLettersPowerupButton: {fileID: 543146647}
   freeVowelsPowerupButton: {fileID: 1916456274}

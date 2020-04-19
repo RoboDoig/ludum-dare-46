@@ -268,11 +268,31 @@ public class GameManager : MonoBehaviour
 
     public void NewLettersPowerup()
     {
+        // how many letters do we get this round?
+        int newLettersThisRound = availableLetterPanel.CountTotalLetters();
 
+        // choose those letters
+        string newLetters = "";
+        for (int i = 0; i < newLettersThisRound; i++)
+        {
+            newLetters += letterChoice[Random.Range(0, letterChoice.Length)];
+        }
+
+        // show them in the UI
+        availableLetterPanel.ClearLetters();
+        availableLetterPanel.InitialiseLetters(newLetters);
     }
 
     public void FreeVowelsPowerup()
     {
+        string vowelChoice = "aeiou";
+        int nVowels = Random.Range(1, 3);
+        string newLetters = "";
+        for (int i = 0; i < nVowels; i++)
+        {
+            newLetters += vowelChoice[Random.Range(0, vowelChoice.Length)];
+        }
 
+        availableLetterPanel.AddLetters(newLetters);
     }
 }
