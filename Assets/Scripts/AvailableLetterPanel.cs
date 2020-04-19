@@ -79,4 +79,17 @@ public class AvailableLetterPanel : MonoBehaviour
 
         return keptLetters;
     }
+
+    public int CountAvailableLetters()
+    {
+        int n = 0;
+        foreach (LetterSlotDisplay slotDisplay in letterDisplays)
+        {
+            if (!slotDisplay.kept && slotDisplay.available)
+            {
+                n += 1;
+            }
+        }
+        return n;
+    }
 }

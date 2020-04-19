@@ -178,13 +178,16 @@ public class GameManager : MonoBehaviour
         gameRounds++;
         previousWorldList.Add(word.Trim());
 
+        // how many letters do we get this round?
+        //int newLettersThisRound = Random.Range(minNewLettersPerRound, maxNewLettersPerRound);
+        int newLettersThisRound = availableLetterPanel.CountAvailableLetters() + 1;
+
         ClearWordPanel();
+        wordPanel.Shake();
+
         availableLetterPanel.ClearLetters();
 
         SetWordPanel((" " + word.Trim() + " ").ToUpper(), true);
-
-        // how many letters do we get this round?
-        int newLettersThisRound = Random.Range(minNewLettersPerRound, maxNewLettersPerRound);
 
         // choose those letters
         string newLetters = "";
