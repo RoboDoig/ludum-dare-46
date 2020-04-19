@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
         if(timer < 0)
         {
             timer = 0;
-            GameOver("You ran out of time");
+            GameOver("T I M E R    D E P L E T E D");
         }
 
         float timerFraction = timer / timerMaxThisRound;
@@ -105,7 +105,13 @@ public class GameManager : MonoBehaviour
 
         if (!notUsedBefore)
         {
-            GameOver("You repeated the word: " + word.ToUpper());
+            string wordDisplay = "";
+            foreach(char character in word)
+            {
+                wordDisplay += (character + " ");
+            }
+            GameOver("W O R D    R E P E A T E D:    " + wordDisplay.ToUpper());
+
         }
 
         if (!wordValid)
@@ -226,7 +232,7 @@ public class GameManager : MonoBehaviour
     void GameOver(string failMessage)
     {
         gameOverPanel.SetActive(true);
-        roundSummaryText.text = "You lasted " + gameRounds.ToString() + " rounds";
+        roundSummaryText.text = "A F T E R    " + gameRounds.ToString() + "    R O U N D S";
         failMessageText.text = failMessage;
     }
 
