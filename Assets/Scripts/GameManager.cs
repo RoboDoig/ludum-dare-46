@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public WordPanel wordPanel;
+    public Button keepButton;
+    public Button aliveButton;
+
     public AvailableLetterPanel availableLetterPanel;
     public PowerupPanel powerupPanel;
     public Image timerImage;
@@ -51,6 +54,11 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        // Start sequence
+        StartSequence();
+
+        // Tutorial sequence
+
         // Begin new round
         // how many letters do we get this round?
         int newLettersThisRound = Random.Range(minNewLettersPerRound, maxNewLettersPerRound);
@@ -307,5 +315,10 @@ public class GameManager : MonoBehaviour
         }
 
         availableLetterPanel.AddLetters(newLetters);
+    }
+
+    void StartSequence()
+    {
+
     }
 }
