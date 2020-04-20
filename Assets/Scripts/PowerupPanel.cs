@@ -24,6 +24,26 @@ public class PowerupPanel : MonoBehaviour
     public Button newLettersPowerupButton;
     public Button freeVowelsPowerupButton;
 
+    Image panelImage;
+    Color offColor = new Color(1, 1, 1, 0);
+    Color onColor = new Color(1, 1, 1, 1);
+
+    void Start()
+    {
+        panelImage = GetComponent<Image>();
+    }
+
+    void Update()
+    {
+        if (timerPowerupActive || newLettersPowerupActive || freeVowelsPowerupActive)
+        {
+            panelImage.color = onColor;
+        } else
+        {
+            panelImage.color = offColor;
+        }
+    }
+
     public void TimerPowerup()
     {
         if (timerPowerupActive)
