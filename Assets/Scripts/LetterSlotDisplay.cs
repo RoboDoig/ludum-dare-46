@@ -28,8 +28,11 @@ public class LetterSlotDisplay : MonoBehaviour, IDragHandler, IEndDragHandler, I
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        inDragMode = true;
-        canvasGroup.blocksRaycasts = false;
+        if (!kept)
+        {
+            inDragMode = true;
+            canvasGroup.blocksRaycasts = false;
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -40,8 +43,11 @@ public class LetterSlotDisplay : MonoBehaviour, IDragHandler, IEndDragHandler, I
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        inDragMode = false;
-        canvasGroup.blocksRaycasts = true;
+        if (!kept)
+        {
+            inDragMode = false;
+            canvasGroup.blocksRaycasts = true;
+        }
     }
 
     public void DropSuccess()

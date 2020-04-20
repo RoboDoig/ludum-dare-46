@@ -29,7 +29,7 @@ public class AvailableLetterPanel : MonoBehaviour
             // create letter display for each character
             GameObject newDisplay = Instantiate(letterSlotDisplay);
             letterDisplays.Add(newDisplay.GetComponent<LetterSlotDisplay>());
-            newDisplay.transform.SetParent(transform);
+            newDisplay.transform.SetParent(transform, false);
             newDisplay.GetComponent<RectTransform>().anchoredPosition = new Vector2(Random.Range(-1000,1000), 1000);
             newDisplay.GetComponent<LayoutElement>().ignoreLayout = true;
             newDisplay.GetComponent<LetterSlotDisplay>().parentLayoutTransform = newSlot.GetComponent<RectTransform>();
@@ -78,5 +78,43 @@ public class AvailableLetterPanel : MonoBehaviour
         }
 
         return keptLetters;
+    }
+
+    public int CountAvailableLetters()
+    {
+        int n = 0;
+        foreach (LetterSlotDisplay slotDisplay in letterDisplays)
+        {
+            if (!slotDisplay.kept && slotDisplay.available)
+            {
+                n += 1;
+            }
+        }
+        return n;
+    }
+
+    public int CountTotalLetters()
+    {
+        return (letterDisplays.Count);
+    }
+
+    public void AddLetters(string letters)
+    {
+        foreach (char character in letters)
+        {
+            // create a new letter slot for each character
+            GameObject newSlot = Instantiate(letterSlot);
+            newSlot.transform.SetParent(transform);
+            letterSlots.Add(newSlot);
+
+            // create letter display for each character
+            GameObject newDisplay = Instantiate(letterSlotDisplay);
+            letterDisplays.Add(newDisplay.GetComponent<LetterSlotDisplay>());
+            newDisplay.transform.SetParent(transform, false);
+            newDisplay.GetComponent<RectTransform>().anchoredPosition = new Vector2(Random.Range(-1000, 1000), 1000);
+            newDisplay.GetComponent<LayoutElement>().ignoreLayout = true;
+            newDisplay.GetComponent<LetterSlotDisplay>().parentLayoutTransform = newSlot.GetComponent<RectTransform>();
+            newDisplay.GetComponentInChildren<Text>().text = character.ToString().ToUpper();
+        }
     }
 }

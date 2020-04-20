@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public WordPanel wordPanel;
+    public Button keepButton;
+    public Button aliveButton;
+
     public AvailableLetterPanel availableLetterPanel;
+    public PowerupPanel powerupPanel;
+    public Image timerImage;
     public GameObject letterSlot;
     public Text roundsText;
-    public Text livesText;
-    public Text timerText;
     public Text roundSummaryText;
     public Text failMessageText;
     public GameObject gameOverPanel;
@@ -20,20 +24,20 @@ public class GameManager : MonoBehaviour
     List<string> wordList;
     List<string> previousWorldList;
     string letterChoice;
+    AudioManager audioManager;
 
     [Header("Game Parameters")]
-    public int startingLives = 10;
-    public int minNewLettersPerRound = 1;
+    public int minNewLettersPerRound = 1; 
     public int maxNewLettersPerRound = 4;
     public float defaultTimerLength = 30f; // default amount of time per round
     public float timerMultiplier = 0.1f;
 
     int gameRounds = 0;
     int score = 0;
-    int currentLives;
     bool keepToggle = false;
     float timer;
     float timerSpeed;
+    float timerMaxThisRound;
 
     // Start is called before the first frame update
     void Awake()
@@ -48,11 +52,12 @@ public class GameManager : MonoBehaviour
         letterChoice = "abcdefghijklmnopqrstuvwxyz ";
 
         gameOverPanel.SetActive(false);
+
+        audioManager = GetComponent<AudioManager>();
     }
 
     void Start()
     {
-        currentLives = startingLives;
         // Begin new round
         // how many letters do we get this round?
         int newLettersThisRound = Random.Range(minNewLettersPerRound, maxNewLettersPerRound);
@@ -76,18 +81,24 @@ public class GameManager : MonoBehaviour
         // set timer
         timer = defaultTimerLength;
         timerSpeed = 1f;
+        timerMaxThisRound = timer;
     }
 
     // Update is called once per frame
     void Update()
     {
         timer -= Time.deltaTime * timerSpeed;
+
+        audioManager.TimeRunningOut(timer / timerSpeed);
+
         if(timer < 0)
         {
             timer = 0;
-            GameOver("You ran out of time");
+            GameOver("T I M E R    D E P L E T E D");
         }
-        UpdateTimerInformation();
+
+        float timerFraction = timer / timerMaxThisRound;
+        timerImage.fillAmount = timerFraction;
     }
 
     public void AliveButtonClicked()
@@ -104,13 +115,29 @@ public class GameManager : MonoBehaviour
 
         if (!notUsedBefore)
         {
-            GameOver("You repeated the word: " + word.ToUpper());
+            string wordDisplay = "";
+            foreach(char character in word)
+            {
+                wordDisplay += (character + " ");
+            }
+            GameOver("W O R D    R E P E A T E D:    " + wordDisplay.ToUpper());
+
+        }
+
+        if (!wordValid)
+        {
+            audioManager.Fail();
+            wordPanel.Shake();
         }
 
         // Progress to next round
         if ((wordValid && notUsedBefore))
-            ProgressRound(word, keptLetters);
+        {
+            audioManager.FadeOutTimeRunningOut();
+            audioManager.RoundEnd();
 
+            ProgressRound(word, keptLetters);
+        }
         UpdateScoreInformation();
     }
 
@@ -144,7 +171,7 @@ public class GameManager : MonoBehaviour
         foreach (char c in str)
         {
             GameObject slot = Instantiate(letterSlot);
-            slot.transform.SetParent(wordPanel.transform);
+            slot.transform.SetParent(wordPanel.transform, false);
 
             LetterSlotBig slotComponent = slot.GetComponent<LetterSlotBig>();
             slotComponent.SetText(c.ToString());
@@ -175,16 +202,20 @@ public class GameManager : MonoBehaviour
 
     void ProgressRound(string word, string keptLetters)
     {
+        wordPanel.ColourChange();
+
         gameRounds++;
         previousWorldList.Add(word.Trim());
 
+        // how many letters do we get this round?
+        //int newLettersThisRound = Random.Range(minNewLettersPerRound, maxNewLettersPerRound);
+        int newLettersThisRound = availableLetterPanel.CountAvailableLetters() + Random.Range(1, 3);
+
         ClearWordPanel();
+
         availableLetterPanel.ClearLetters();
 
         SetWordPanel((" " + word.Trim() + " ").ToUpper(), true);
-
-        // how many letters do we get this round?
-        int newLettersThisRound = Random.Range(minNewLettersPerRound, maxNewLettersPerRound);
 
         // choose those letters
         string newLetters = "";
@@ -197,37 +228,36 @@ public class GameManager : MonoBehaviour
         // show them in the UI
         availableLetterPanel.InitialiseLetters(newLetters);
 
-        // update lives according to length of word made
-        currentLives += word.Trim().Length / 2;
-        currentLives -= keptLetters.Length;
-
         keepToggle = false;
 
         // reset timer
         timer = defaultTimerLength;
         timerSpeed = 1 + (newLetters.Length * timerMultiplier);
+        timerMaxThisRound = timer;
+
+        // update powerups
+        powerupPanel.UpdatePowerupPanel();
     }
 
     void UpdateScoreInformation()
     {
-        roundsText.text = "Rounds Complete: " + gameRounds.ToString();
-        livesText.text = "Lives: " + currentLives.ToString();
-    }
-
-    void UpdateTimerInformation()
-    {
-        timerText.text = "Time Left: " + timer.ToString();
+        roundsText.text = gameRounds.ToString();
     }
 
     void GameOver(string failMessage)
     {
+        audioManager.GameOver();
         gameOverPanel.SetActive(true);
-        roundSummaryText.text = "You lasted " + gameRounds.ToString() + " rounds";
+        roundSummaryText.text = "A F T E R    " + gameRounds.ToString() + "    R O U N D S";
         failMessageText.text = failMessage;
+        powerupPanel.ResetPanel();
+        Time.timeScale = 0f;
     }
 
     public void ResetGame()
     {
+        Time.timeScale = 1f;
+
         gameOverPanel.SetActive(false);
 
         previousWorldList = new List<string>();
@@ -237,7 +267,6 @@ public class GameManager : MonoBehaviour
 
         availableLetterPanel.ClearLetters();
 
-        currentLives = startingLives;
         gameRounds = 0;
         // Begin new round
         // how many letters do we get this round?
@@ -261,6 +290,53 @@ public class GameManager : MonoBehaviour
 
         // set timer
         timer = defaultTimerLength;
+        timerMaxThisRound = timer;
         timerSpeed = 1f;
+    }
+
+    public void TimerPowerup()
+    {
+        timer += defaultTimerLength;
+        timerMaxThisRound = timer;
+    }
+
+    public void NewLettersPowerup()
+    {
+        // how many letters do we get this round?
+        int newLettersThisRound = availableLetterPanel.CountTotalLetters();
+
+        // choose those letters
+        string newLetters = "";
+        for (int i = 0; i < newLettersThisRound; i++)
+        {
+            newLetters += letterChoice[Random.Range(0, letterChoice.Length)];
+        }
+
+        // show them in the UI
+        availableLetterPanel.ClearLetters();
+        availableLetterPanel.InitialiseLetters(newLetters);
+    }
+
+    public void FreeVowelsPowerup()
+    {
+        string vowelChoice = "aeiou";
+        int nVowels = Random.Range(1, 3);
+        string newLetters = "";
+        for (int i = 0; i < nVowels; i++)
+        {
+            newLetters += vowelChoice[Random.Range(0, vowelChoice.Length)];
+        }
+
+        availableLetterPanel.AddLetters(newLetters);
+    }
+
+    void StartSequence()
+    {
+
+    }
+
+    public void GoToStartMenu()
+    {
+        SceneManager.LoadScene("StartScene");
     }
 }
