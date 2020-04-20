@@ -904,6 +904,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b028308fa404a304b892f3137b17eb03, type: 3}
   - {fileID: 8300000, guid: 747deefedf8cd3a4ba4078d9f6767a97, type: 3}
   - {fileID: 8300000, guid: 51dc6ad9ff49bdd4084f09da14232217, type: 3}
+  failClips:
+  - {fileID: 8300000, guid: 58c4acf09d40acd48af95fe4ac288b2a, type: 3}
+  - {fileID: 8300000, guid: e38deb6f56fc5fd4084eaa78cbfd261f, type: 3}
+  - {fileID: 8300000, guid: 087913b381e903542ae7967d4d2cca3a, type: 3}
+  gameOver: {fileID: 8300000, guid: e6279797321739846ba684bbdbb4f885, type: 3}
 --- !u!1 &543146645
 GameObject:
   m_ObjectHideFlags: 0
@@ -1335,9 +1340,9 @@ RectTransform:
   m_Father: {fileID: 1101969928}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 659.15, y: -110.95}
   m_SizeDelta: {x: 1218.3, y: 181.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &793331688
@@ -1520,7 +1525,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 370}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 1318.3, y: 221.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1101969929
 MonoBehaviour:
@@ -2397,7 +2402,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1780386792
 RectTransform:
   m_ObjectHideFlags: 0

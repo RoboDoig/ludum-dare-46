@@ -86,4 +86,15 @@ public class PowerupPanel : MonoBehaviour
             freeVowelsPowerupButton.GetComponentInChildren<Text>().color = Color.white;
         }
     }
+
+    public void ResetPanel()
+    {
+        timerPowerupActive = true;
+        newLettersPowerupActive = true;
+        freeVowelsPowerupActive = true;
+
+        TimerPowerup();
+        NewLettersPowerup();
+        FreeVowelsPowerup();
+    }
 }

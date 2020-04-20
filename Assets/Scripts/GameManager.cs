@@ -126,6 +126,7 @@ public class GameManager : MonoBehaviour
 
         if (!wordValid)
         {
+            audioManager.Fail();
             wordPanel.Shake();
         }
 
@@ -245,9 +246,11 @@ public class GameManager : MonoBehaviour
 
     void GameOver(string failMessage)
     {
+        audioManager.GameOver();
         gameOverPanel.SetActive(true);
         roundSummaryText.text = "A F T E R    " + gameRounds.ToString() + "    R O U N D S";
         failMessageText.text = failMessage;
+        powerupPanel.ResetPanel();
         Time.timeScale = 0f;
     }
 

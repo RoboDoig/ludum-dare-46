@@ -8,6 +8,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip timeRunningOut;
 
     public List<AudioClip> roundEndClips;
+    public List<AudioClip> failClips;
+    public AudioClip gameOver;
 
     AudioSource audioSourceTimer;
     AudioSource audioSourceFX;
@@ -76,6 +78,7 @@ public class AudioManager : MonoBehaviour
         if (t > 10)
         {
             timeOutTriggered = false;
+            FadeOutTimeRunningOut();
         }
     }
 
@@ -94,6 +97,19 @@ public class AudioManager : MonoBehaviour
     {
         int choice = Random.Range(0, roundEndClips.Count);
         audioSourceFX.clip = roundEndClips[choice];
+        audioSourceFX.Play();
+    }
+
+    public void Fail()
+    {
+        int choice = Random.Range(0, failClips.Count);
+        audioSourceFX.clip = failClips[choice];
+        audioSourceFX.Play();
+    }
+
+    public void GameOver()
+    {
+        audioSourceFX.clip = gameOver;
         audioSourceFX.Play();
     }
 }
