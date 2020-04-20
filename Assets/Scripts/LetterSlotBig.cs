@@ -18,7 +18,7 @@ public class LetterSlotBig : MonoBehaviour, IDropHandler, IPointerDownHandler
         if (eventData.pointerDrag != null && !locked)
         {
             slotDisplay = eventData.pointerDrag.GetComponent<LetterSlotDisplay>();
-            if (slotDisplay != null)
+            if (slotDisplay != null && !slotDisplay.kept)
             {
                 SetText(slotDisplay.GetComponentInChildren<Text>().text);
                 slotDisplay.DropSuccess();
