@@ -54,11 +54,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // Start sequence
-        StartSequence();
-
-        // Tutorial sequence
-
         // Begin new round
         // how many letters do we get this round?
         int newLettersThisRound = Random.Range(minNewLettersPerRound, maxNewLettersPerRound);
