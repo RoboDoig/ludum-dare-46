@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     List<string> wordList;
     List<string> previousWorldList;
     string letterChoice;
+    AudioManager audioManager;
 
     [Header("Game Parameters")]
     public int minNewLettersPerRound = 1; 
@@ -51,6 +52,8 @@ public class GameManager : MonoBehaviour
         letterChoice = "abcdefghijklmnopqrstuvwxyz ";
 
         gameOverPanel.SetActive(false);
+
+        audioManager = GetComponent<AudioManager>();
     }
 
     void Start()
@@ -85,6 +88,9 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         timer -= Time.deltaTime * timerSpeed;
+
+        audioManager.TimeRunningOut(timer / timerSpeed);
+
         if(timer < 0)
         {
             timer = 0;
@@ -125,8 +131,12 @@ public class GameManager : MonoBehaviour
 
         // Progress to next round
         if ((wordValid && notUsedBefore))
-            ProgressRound(word, keptLetters);
+        {
+            audioManager.FadeOutTimeRunningOut();
+            audioManager.RoundEnd();
 
+            ProgressRound(word, keptLetters);
+        }
         UpdateScoreInformation();
     }
 
@@ -238,10 +248,13 @@ public class GameManager : MonoBehaviour
         gameOverPanel.SetActive(true);
         roundSummaryText.text = "A F T E R    " + gameRounds.ToString() + "    R O U N D S";
         failMessageText.text = failMessage;
+        Time.timeScale = 0f;
     }
 
     public void ResetGame()
     {
+        Time.timeScale = 1f;
+
         gameOverPanel.SetActive(false);
 
         previousWorldList = new List<string>();

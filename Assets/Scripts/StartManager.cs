@@ -47,6 +47,11 @@ public class StartManager : MonoBehaviour
     private delegate void UpdateAction();
     private UpdateAction updateAction;
 
+    void Awake()
+    {
+        Time.timeScale = 1f;
+    }
+
     void Start()
     {
         SetColorGroup1(transparent);
