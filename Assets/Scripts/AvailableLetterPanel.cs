@@ -29,7 +29,7 @@ public class AvailableLetterPanel : MonoBehaviour
             // create letter display for each character
             GameObject newDisplay = Instantiate(letterSlotDisplay);
             letterDisplays.Add(newDisplay.GetComponent<LetterSlotDisplay>());
-            newDisplay.transform.SetParent(transform);
+            newDisplay.transform.SetParent(transform, false);
             newDisplay.GetComponent<RectTransform>().anchoredPosition = new Vector2(Random.Range(-1000,1000), 1000);
             newDisplay.GetComponent<LayoutElement>().ignoreLayout = true;
             newDisplay.GetComponent<LetterSlotDisplay>().parentLayoutTransform = newSlot.GetComponent<RectTransform>();
@@ -110,7 +110,7 @@ public class AvailableLetterPanel : MonoBehaviour
             // create letter display for each character
             GameObject newDisplay = Instantiate(letterSlotDisplay);
             letterDisplays.Add(newDisplay.GetComponent<LetterSlotDisplay>());
-            newDisplay.transform.SetParent(transform);
+            newDisplay.transform.SetParent(transform, false);
             newDisplay.GetComponent<RectTransform>().anchoredPosition = new Vector2(Random.Range(-1000, 1000), 1000);
             newDisplay.GetComponent<LayoutElement>().ignoreLayout = true;
             newDisplay.GetComponent<LetterSlotDisplay>().parentLayoutTransform = newSlot.GetComponent<RectTransform>();

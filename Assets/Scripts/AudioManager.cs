@@ -109,6 +109,7 @@ public class AudioManager : MonoBehaviour
 
     public void GameOver()
     {
+        audioSourceTimer.Stop();
         audioSourceFX.clip = gameOver;
         audioSourceFX.Play();
     }

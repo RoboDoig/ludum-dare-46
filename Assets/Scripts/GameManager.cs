@@ -171,7 +171,7 @@ public class GameManager : MonoBehaviour
         foreach (char c in str)
         {
             GameObject slot = Instantiate(letterSlot);
-            slot.transform.SetParent(wordPanel.transform);
+            slot.transform.SetParent(wordPanel.transform, false);
 
             LetterSlotBig slotComponent = slot.GetComponent<LetterSlotBig>();
             slotComponent.SetText(c.ToString());
@@ -290,6 +290,7 @@ public class GameManager : MonoBehaviour
 
         // set timer
         timer = defaultTimerLength;
+        timerMaxThisRound = timer;
         timerSpeed = 1f;
     }
 
